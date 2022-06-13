@@ -1,9 +1,10 @@
 package kdruc.solar;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AstralObject implements IAstralObject {
+public class AstralObject extends Panel implements IAstralObject {
 
 	private double mass;
 	private Vector position;
@@ -11,8 +12,12 @@ public class AstralObject implements IAstralObject {
 	private Vector acceleration;
 	private List<IAstralObject> children;
 
-	public AstralObject(){
+	public AstralObject() {
 		this(0.0, new Vector(), new Vector(), new Vector());
+	}
+
+	public AstralObject(double mass) {
+		this(mass, new Vector(), new Vector(), new Vector());
 	}
 
 	public AstralObject(double mass, Vector position, Vector velocity, Vector acceleration) {
@@ -28,7 +33,9 @@ public class AstralObject implements IAstralObject {
 		return mass;
 	}
 
-	public void setMass(double mass) {this.mass = mass;}
+	public void setMass(double mass) {
+		this.mass = mass;
+	}
 
 	@Override
 	public Vector position() {
@@ -61,17 +68,20 @@ public class AstralObject implements IAstralObject {
 	public List<IAstralObject> children() {
 		return children;
 	}
-	public void addChild(AstralObject astralObject){
+
+	public void addChild(AstralObject astralObject) {
 		children.add(astralObject);
 	}
 
 	@Override
 	public void update(int time) {
-		AstralObject centerOfMass = new CenterOfMass(children);
+		IAstralObject centerOfMass = new CenterOfMass(children);
 		List<IAstralObject> updatedChildren = new ArrayList<>();
-			for(IAstralObject child : children){
-
-			}
-			children = updatedChildren;
+		IAstralObject updatedObject = null;
+		for (IAstralObject child : children) {
+			updatedObject = CalculateChange.updateAstralObject(child, centerOfMass, time);
+			updatedChildren.add(updatedObject);
+		}
+		children = updatedChildren;
 	}
 }
