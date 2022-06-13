@@ -5,7 +5,7 @@ public class Vector {
 	private final double y;
 
 	public Vector() {
-		this(0,0);
+		this(0, 0);
 	}
 
 	public Vector(double x, double y) {
@@ -19,6 +19,14 @@ public class Vector {
 
 	public Vector add(Vector v) {
 		return new Vector(x + v.x, y + v.y);
+	}
+
+	public double length() {
+		return Math.sqrt(x * x + y * y);
+	}
+
+	public Vector normal() {
+		return this.scale(1 / this.length());
 	}
 
 	public double x() {
